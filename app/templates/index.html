@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+  <h1>Welcome!</h1>
+</div>
+
+<ul id="tasks">
+  {% for task in tasks %}
+    <li><a href="http://{{ task.ip }}:{{ task.port }}/" class="btn btn-default" target="_blank">Connect to {{ task.name }}</a></li>
+  {% endfor %}
+</ul>
+
+<form method="POST">
+  <button class="btn btn-primary" type="submit">Start a new desktop</button>
+</form>
+<br>
+{{ resp }}
+
+{% endblock %}

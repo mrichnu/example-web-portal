@@ -1,2 +1,2 @@
 FROM nginx:1.10
-COPY default /etc/nginx/sites-enabled/
+COPY default.conf /etc/nginx/conf.d/

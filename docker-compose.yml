@@ -5,7 +5,9 @@ app:
     - "8000"
   volumes:
     - /usr/src/app/static
-  env_file: .env
+  environment:
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
   command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
 
 web:
@@ -16,6 +18,6 @@ web:
   volumes:
     - /www/static
   volumes_from:
-    - web
+    - app
   links:
-    - web:web
+    - app:app
