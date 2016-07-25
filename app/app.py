@@ -24,7 +24,7 @@ def index():
         return redirect('/')
 
     tasks = get_current_tasks()
-    return render_template('index.html', tasks=tasks, resp=resp)
+    return render_template('index.html', tasks=tasks)
 
 def start_new_task():
     client = boto3.client('ecs', region_name=app.config['AWS_REGION'])
@@ -55,7 +55,8 @@ def get_current_tasks():
             tasks.append({
                 'containerInstanceArn': task['containerInstanceArn'],
                 'port': task['containers'][0]['networkBindings'][0]['hostPort'],
-                'name': task['containers'][0]['name']
+                'name': task['containers'][0]['name'],
+                'id': task['taskArn']
             })
         except:
             pass
@@ -74,5 +75,15 @@ def get_container_ip(containerInstanceArn):
     response = ec2_client.describe_instances(InstanceIds=[ec2InstanceId])
     return response['Reservations'][0]['Instances'][0]['PublicIpAddress']
 
+@app.route('/stop/<path:task_id>', methods=['POST'])
+def stop_task(task_id):
+    client = boto3.client('ecs', region_name=app.config['AWS_REGION'])
+    response = client.stop_task(
+        cluster=app.config['AWS_ECS_CLUSTER'],
+        task=task_id
+    )
+    time.sleep(2)
+    return redirect('/')
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host='0.0.0.0', port=8000)

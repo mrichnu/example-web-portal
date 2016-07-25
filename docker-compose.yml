@@ -4,19 +4,17 @@ app:
   expose:
     - "8000"
   volumes:
-    - /usr/src/app/static
+    - ./app:/usr/src/app
   environment:
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
-  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
+    - ENV=DEV
 
 web:
   restart: always
   build: ./web/
   ports:
     - "80:80"
-  volumes:
-    - /www/static
   volumes_from:
     - app
   links:

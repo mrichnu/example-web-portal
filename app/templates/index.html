@@ -8,14 +8,17 @@
 
 <ul id="tasks">
   {% for task in tasks %}
-    <li><a href="http://{{ task.ip }}:{{ task.port }}/" class="btn btn-default" target="_blank">Connect to {{ task.name }}</a></li>
+    <li><a href="http://{{ task.ip }}:{{ task.port }}/" class="btn btn-default" target="_blank">Connect to {{ task.name }}</a> 
+      <form action="/stop/{{ task.id }}" method="POST">
+        <button class="btn btn-danger" type="submit">Stop</button>
+      </form>
+    </li>
   {% endfor %}
+  <li>
+    <form method="POST" id="startform">
+      <button class="btn btn-primary" type="submit">Start a new desktop</button>
+    </form>
+  </li>
 </ul>
-
-<form method="POST">
-  <button class="btn btn-primary" type="submit">Start a new desktop</button>
-</form>
-<br>
-{{ resp }}
 
 {% endblock %}
